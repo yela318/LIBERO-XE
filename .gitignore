@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+~$*
+data/
+
+# local scripts and results, not part of the benchmark
+setup_libero.sh
+run_libero_xe.sh
+run_sweep.sh
+eval_one.sh
+run_replay_sweep.sh
+replay_one.sh
+run_overnight.sh
+snapshot_robots.py
+check_grippers.py
+results/
