@@ -24,7 +24,7 @@ uv run scripts/serve_policy.py policy:checkpoint \
     --policy.config=pi05_libero --policy.dir=gs://openpi-assets/checkpoints/pi05_libero
 ```
 
-**2. 평가** (터미널 2, LIBERO 환경에서)
+**2 - 1. 평가** (터미널 2, LIBERO 환경에서)
 ```bash
 python LIBERO-XE/eval_libero_xe.py --robot UR5e --gripper default --task-suite-name libero_object
 ```
@@ -43,7 +43,7 @@ python LIBERO-XE/eval_libero_xe.py --robot UR5e --gripper default --task-suite-n
 
 결과는 `<out>/<suite>/<로봇>_<그리퍼>/`에 `episodes.jsonl`(회차별 기록), `summary.json`(성공률), `videos/`로 저장됩니다.
 
-**기준 설정 한 번에 돌리기**
+**2 - 2.기준 설정 한 번에 돌리기**
 
 아래 6개 설정 × 4개 suite를 차례로 평가하고, 끝나면 요약을 출력합니다(정책 서버는 켜 둔 상태).
 ```bash
