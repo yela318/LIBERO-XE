@@ -37,7 +37,7 @@ python LIBERO-XE/eval_libero_xe.py --robot UR5e --gripper default --task-suite-n
 | `--task-suite-name` | `libero_spatial`, `libero_object`, `libero_goal`, `libero_10` | `libero_spatial` |
 | `--num-trials-per-task` | task당 회차 (LIBERO 공식 초기 상태 0번부터) | `50` |
 | `--task-ids` | 일부 task만 (예: `--task-ids 0 1 2`) | 전체 |
-| `--video-every` | N회마다 영상 저장 (0 = 저장 안 함) | `0` |
+| `--videos-per-task` | task당 저장할 영상 수. 각 task의 앞쪽 N회차를 저장 (0 = 저장 안 함) | `0` |
 | `--out` | 결과 폴더 | `data/libero_xe` |
 | `--host`, `--port` | 정책 서버 주소 | `127.0.0.1`, `8000` |
 
@@ -68,7 +68,7 @@ bash LIBERO-XE/run_benchmark.sh
 | `P` | 동시에 돌릴 평가 수. 모두 같은 정책 서버에 붙습니다. 늘리면 빨라지지만 평가마다 시뮬레이터 하나(RAM, 렌더링용 GPU)를 씁니다. | `1` |
 | `OUT` | 결과 폴더. 실행별 로그는 `OUT/logs/`에 저장됩니다. 같은 폴더에 다시 돌리면 결과가 이어서 쌓이고, 요약에서는 같은 회차를 한 번만 셉니다. | `data/libero_xe` |
 | `HOST`, `PORT` | 정책 서버 주소. 서버를 다른 포트나 다른 머신에서 띄웠을 때 바꿉니다. | `127.0.0.1`, `8000` |
-| `VIDEO_EVERY` | task마다 N번째 회차마다 영상을 저장합니다(0번째 회차 포함). `0`이면 저장하지 않습니다. | `0` |
+| `VIDEOS` | task당 저장할 영상 수입니다. 각 task의 앞쪽 N회차를 저장합니다(예: `1`이면 task마다 1개, suite당 10개). `0`이면 저장하지 않습니다. | `0` |
 | `PYTHON` | 평가에 쓸 Python. LIBERO 환경을 활성화하지 않고 경로로 지정할 때 씁니다. | `python` |
 
 예시:
@@ -76,8 +76,8 @@ bash LIBERO-XE/run_benchmark.sh
 # 빠른 확인: task당 5회, Object/Goal만, 3개씩 동시에
 TRIALS=5 P=3 SUITES="libero_object libero_goal" bash LIBERO-XE/run_benchmark.sh
 
-# 주 설정만 공식 기준으로, task마다 영상 1개(0번째 회차) 저장
-SETTINGS="UR5e:default" VIDEO_EVERY=50 bash LIBERO-XE/run_benchmark.sh
+# 주 설정만 공식 기준으로, task마다 영상 1개 저장
+SETTINGS="UR5e:default" VIDEOS=1 bash LIBERO-XE/run_benchmark.sh
 
 # 화면 없는 서버, 정책 서버가 8001번 포트일 때
 MUJOCO_GL=egl PORT=8001 bash LIBERO-XE/run_benchmark.sh

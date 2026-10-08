@@ -54,7 +54,7 @@ class Args:
     num_trials_per_task: int = 50  # official init states 0..N-1
     robot: str = "Panda"
     gripper: str = "default"  # "default" (own gripper) or a name from xe_libero.GRIPPERS, e.g. "PandaGripper"
-    video_every: int = 0  # save a video every N episodes per task (0 = never)
+    videos_per_task: int = 0  # save videos of the first N episodes of each task (0 = none)
     out: str = "data/libero_xe"
     seed: int = 7
 
@@ -120,7 +120,7 @@ def eval_libero(args: Args) -> None:
                     wrist = np.ascontiguousarray(obs["robot0_eye_in_hand_image"][::-1, ::-1])
                     img = image_tools.convert_to_uint8(image_tools.resize_with_pad(img, args.resize_size, args.resize_size))
                     wrist = image_tools.convert_to_uint8(image_tools.resize_with_pad(wrist, args.resize_size, args.resize_size))
-                    if args.video_every and ep % args.video_every == 0:
+                    if ep < args.videos_per_task:
                         frames.append(np.concatenate([img, wrist], axis=1))
                     if not action_plan:
                         element = {"observation/image": img, "observation/wrist_image": wrist,

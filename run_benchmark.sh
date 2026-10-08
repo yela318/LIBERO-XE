@@ -9,7 +9,7 @@
 #   P            evaluations run in parallel against the one policy server (default 1)
 #   OUT          results dir (default data/libero_xe); per-run logs go to $OUT/logs
 #   HOST, PORT   policy server (default 127.0.0.1, 8000)
-#   VIDEO_EVERY  save a video every N episodes per task (default 0 = none)
+#   VIDEOS       videos saved per task: the first N episodes (default 0 = none)
 #   PYTHON       Python of the LIBERO environment (default python)
 set -eu
 
@@ -27,7 +27,7 @@ P=${P:-1}
 export OUT=${OUT:-data/libero_xe}
 export HOST=${HOST:-127.0.0.1}
 export PORT=${PORT:-8000}
-export VIDEO_EVERY=${VIDEO_EVERY:-0}
+export VIDEOS=${VIDEOS:-0}
 export PYTHON=${PYTHON:-python}
 export HERE=$(cd "$(dirname "$0")" && pwd)
 export PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}$HERE"
@@ -37,7 +37,7 @@ run_one() {
     local suite=$1 robot=$2 gripper=$3
     local log="$OUT/logs/${suite}_${robot}_${gripper}.log"
     if "$PYTHON" "$HERE/eval_libero_xe.py" --host "$HOST" --port "$PORT" --task-suite-name "$suite" \
-        --robot "$robot" --gripper "$gripper" --num-trials-per-task "$TRIALS" --video-every "$VIDEO_EVERY" \
+        --robot "$robot" --gripper "$gripper" --num-trials-per-task "$TRIALS" --videos-per-task "$VIDEOS" \
         --out "$OUT" > "$log" 2>&1; then
         echo "$(date +%T) done   $suite $robot $gripper: $(grep -o '"success_rate": [0-9.]*' "$log" | tail -1)"
     else
