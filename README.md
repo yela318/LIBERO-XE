@@ -58,9 +58,29 @@ bash LIBERO-XE/run_benchmark.sh
 | IIWA + 기본 그리퍼(Robotiq 140) | 팔 + 그리퍼 교체 |
 | Kinova3 + 기본 그리퍼(Robotiq 85) | 팔 + 그리퍼 교체, 주 설정과 같은 그리퍼의 다른 로봇 |
 
-환경 변수로 바꿀 수 있습니다: `TRIALS`(task당 회차, 기본 50), `SUITES`, `SETTINGS`(예: `"UR5e:default Jaco:PandaGripper"`), `P`(동시 실행 수, 기본 1), `OUT`, `HOST`/`PORT`, `VIDEO_EVERY`.
+명령 앞에 환경 변수를 붙여 설정을 바꿀 수 있습니다.
+
+| 변수 | 기능 | 기본값 |
+|---|---|---|
+| `TRIALS` | task당 평가 회차. LIBERO 공식 초기 상태 0번부터 `TRIALS`개를 씁니다. suite당 회차는 10 task × `TRIALS`입니다. 빠르게 확인할 때는 줄이면 됩니다. | `50` (LIBERO 공식) |
+| `SUITES` | 평가할 suite. 띄어쓰기로 여러 개 지정합니다. | `"libero_spatial libero_object libero_goal libero_10"` |
+| `SETTINGS` | 평가할 `로봇:그리퍼` 조합. 띄어쓰기로 여러 개 지정합니다. 그리퍼 `default`는 로봇 기본 그리퍼입니다. 위 표 외의 조합도 지정할 수 있습니다. | 위 표의 6개 |
+| `P` | 동시에 돌릴 평가 수. 모두 같은 정책 서버에 붙습니다. 늘리면 빨라지지만 평가마다 시뮬레이터 하나(RAM, 렌더링용 GPU)를 씁니다. | `1` |
+| `OUT` | 결과 폴더. 실행별 로그는 `OUT/logs/`에 저장됩니다. 같은 폴더에 다시 돌리면 결과가 이어서 쌓이고, 요약에서는 같은 회차를 한 번만 셉니다. | `data/libero_xe` |
+| `HOST`, `PORT` | 정책 서버 주소. 서버를 다른 포트나 다른 머신에서 띄웠을 때 바꿉니다. | `127.0.0.1`, `8000` |
+| `VIDEO_EVERY` | task마다 N번째 회차마다 영상을 저장합니다(0번째 회차 포함). `0`이면 저장하지 않습니다. | `0` |
+| `PYTHON` | 평가에 쓸 Python. LIBERO 환경을 활성화하지 않고 경로로 지정할 때 씁니다. | `python` |
+
+예시:
 ```bash
-TRIALS=20 P=3 SUITES="libero_object libero_goal" bash LIBERO-XE/run_benchmark.sh
+# 빠른 확인: task당 5회, Object/Goal만, 3개씩 동시에
+TRIALS=5 P=3 SUITES="libero_object libero_goal" bash LIBERO-XE/run_benchmark.sh
+
+# 주 설정만 공식 기준으로, task마다 영상 1개(0번째 회차) 저장
+SETTINGS="UR5e:default" VIDEO_EVERY=50 bash LIBERO-XE/run_benchmark.sh
+
+# 화면 없는 서버, 정책 서버가 8001번 포트일 때
+MUJOCO_GL=egl PORT=8001 bash LIBERO-XE/run_benchmark.sh
 ```
 
 **3. 결과 요약**
